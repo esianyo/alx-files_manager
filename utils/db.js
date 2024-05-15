@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb';
+const { MongoClient } = require('mongodb');
 
 class DBClient {
   constructor() {
@@ -6,15 +6,13 @@ class DBClient {
     const port = process.env.DB_PORT || 27017;
     const database = process.env.DB_DATABASE || 'files_manager';
 
-    // Fix: Add quotes around connection string
-    this.client = new MongoClient(`mongodb://${host}:${port}`, {
+    this.client = new MongoClient (mongodb://${host}:${port}, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
 
-    this.connect().then(() => {
-      this.db = this.client.db(database);
-    });
+    this.connect();
+    this.db = this.client.db(database);
   }
 
   async connect() {
@@ -33,27 +31,32 @@ class DBClient {
 
   async nbUsers() {
     try {
-      const collection = this.db.collection('users');
-      const count = await collection.countDocuments();
+      const connection = await this.client.connect();
+      const db = connection.db(process.env.DB_DATABASE || 'files_manager');
+      const count = await db.collection('users').countDocuments();
+      connection.close();
       return count;
     } catch (error) {
-      console.error('Error getting the number of users:', error);
-      return 0;
+      console.error('Error counting users:', error);
+      throw error; // Re-throw the error for handling in main.js
     }
   }
 
   async nbFiles() {
     try {
-      const collection = this.db.collection('files');
-      const count = await collection.countDocuments();
+      const connection = await this.client.connect();
+      const db = connection.db(process.env.DB_DATABASE || 'files_manager');
+      const count = await db.collection('files').countDocuments();
+      connection.close();
       return count;
     } catch (error) {
-      console.error('Error getting the number of files:', error);
-      return 0;
+      console.error('Error counting files:', error);
+      throw error; // Re-throw the error for handling in main.js
     }
   }
 }
 
 const dbClient = new DBClient();
+module.exports = dbClient;
 
 export default dbClient;
