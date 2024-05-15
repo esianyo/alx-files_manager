@@ -1,5 +1,3 @@
-**Project Repository README**
-
 **## Files Manager**
 
 This is a file manager application built using JavaScript (ES6), NoSQL databases (MongoDB and Redis), and Node.js with Express.js and Kue for job processing.
