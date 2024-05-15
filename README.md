@@ -52,4 +52,4 @@ We welcome contributions to this project! Please refer to the CONTRIBUTING.md fi
 
 **License:**
 
-This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT)
